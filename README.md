@@ -2,6 +2,18 @@
 
 한성대 IoT 통신시스템 팀 프로젝트 - 버스 위치/혼잡도 기능에 사용된 디바이스간 LoRa 통신 코드입니다. 
 
+해당 프로젝트에 사용된 디바이스 및 센서는 다음과 같습니다.
+
+WeMos D1 R1 Board - 1
+
+Arduino Uno Board - 2
+
+codezoo LoRa Shield - 3
+
+NEO 6M GPS Sensor - 1
+
+
+
 해당 코드를 사용하기 위해 SNIPE 라이브러리를 등록해야합니다.
 
 SNIPE: https://github.com/codezoo-ltd/SNIPE
