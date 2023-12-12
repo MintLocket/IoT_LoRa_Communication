@@ -25,10 +25,10 @@ StaticJsonDocument<200> doc;
 DeserializationError error;
 JsonObject root;
 
-const char *ssid = "wsNetwork";  // 와이파이 이름
-const char *pass = "01234567";      // 와이파이 비밀번호
-const char *thingId = "ESP8266_D1_R1";          // 사물 이름 (thing ID) 
-const char *host = "atk03xzexlrj4-ats.iot.ap-northeast-2.amazonaws.com"; // AWS IoT Core 주소
+const char *ssid = "";  // 와이파이 이름
+const char *pass = "";      // 와이파이 비밀번호
+const char *thingId = "";          // 사물 이름 (thing ID) 
+const char *host = ""; // AWS IoT Core 주소
 const char* outTopic = "outTopic"; 
 const char* inTopic = "inTopic"; 
 
@@ -46,78 +46,20 @@ String ver; // LoRa 통신 수신값
 // 사물 인증서 (파일 이름: xxxxxxxxxx-certificate.pem.crt)
 const char cert_str[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
-MIIDWjCCAkKgAwIBAgIVAO9kfC/kbHdd4FAEr99ngGUBZgsFMA0GCSqGSIb3DQEB
-CwUAME0xSzBJBgNVBAsMQkFtYXpvbiBXZWIgU2VydmljZXMgTz1BbWF6b24uY29t
-IEluYy4gTD1TZWF0dGxlIFNUPVdhc2hpbmd0b24gQz1VUzAeFw0yMzExMjgwOTM3
-NTBaFw00OTEyMzEyMzU5NTlaMB4xHDAaBgNVBAMME0FXUyBJb1QgQ2VydGlmaWNh
-dGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDUcZiAOHFu69MSU8Sm
-vBfpXbCeHyMD5cLY19Si8wNUCxr8MrEFNATCH9nGfWlGtxzOgAV+CLJYKjPRBhg6
-p9dOxBignMx9ODjXS0yGtmGa03fh8gxXEfLN4CVgjld3kieE9cQ1b6nelJvqG5Xy
-qkKNEkBftKa/onYtXUIRv5QSBN/PQA4VvpErkKoLk2kFyWldAgmZC6aARJoJJtf4
-ncJmjiW5Q9NsPT8/fm+0Uy3VOag0UKT0rU+lxHAW2cQXJgCc4SLs+lX9SWjSjOPN
-8c16Q138CcYCLjUCq280QKHbOrJYwtIH3op/C83FiX6U6cN1qYEHpPMIZ4wfoSNf
-D4YVAgMBAAGjYDBeMB8GA1UdIwQYMBaAFCdyWaOitqJsCDd9y1Sw0DOaYh/BMB0G
-A1UdDgQWBBSmFlK+QyjYVvxOtX2hlJ3yz5Nn2DAMBgNVHRMBAf8EAjAAMA4GA1Ud
-DwEB/wQEAwIHgDANBgkqhkiG9w0BAQsFAAOCAQEAW/XtucraW72pEVzvzJZkA73X
-bgeQzFX97IodINzXGn3SK7VXzrlLTT1XtcjGWUy5tAedqRZKepjPAzKQntk6HXi9
-Lfu8NeiOd4GGmPsilPWEX3SGbfrsD3enYvz2GkVFwITOzPT3CQFdQi1xgwW4iYZ8
-hjDYu9JWmEPGqD+khr9vFuBbXOgjqeJtTk8FyxTl8agsnFemtizprcHmp2LsfFAY
-+3OA70j8KE48n+jDpUIi7dqtOiUtsn4qPVUZlJxJ2/3+NRJ9GTZgnoM+vVS12z+t
-7nzN/QGoG4YG8J8slJi9n9XOA82MQeiWiYBgLw7iWcdtNUHr240VEJw7yFgRpQ==
+
 -----END CERTIFICATE-----
 )EOF";
 // 사물 인증서 프라이빗 키 (파일 이름: xxxxxxxxxx-private.pem.key)
 const char key_str[] PROGMEM = R"EOF(
 -----BEGIN RSA PRIVATE KEY-----
-MIIEpQIBAAKCAQEA1HGYgDhxbuvTElPEprwX6V2wnh8jA+XC2NfUovMDVAsa/DKx
-BTQEwh/Zxn1pRrcczoAFfgiyWCoz0QYYOqfXTsQYoJzMfTg410tMhrZhmtN34fIM
-VxHyzeAlYI5Xd5InhPXENW+p3pSb6huV8qpCjRJAX7Smv6J2LV1CEb+UEgTfz0AO
-Fb6RK5CqC5NpBclpXQIJmQumgESaCSbX+J3CZo4luUPTbD0/P35vtFMt1TmoNFCk
-9K1PpcRwFtnEFyYAnOEi7PpV/Ulo0ozjzfHNekNd/AnGAi41AqtvNECh2zqyWMLS
-B96KfwvNxYl+lOnDdamBB6TzCGeMH6EjXw+GFQIDAQABAoIBAQCi0X0DqD6nuG3I
-ehMZhsb8wCWAynRXpFw1PRVm3cELRIemCmPJjRiofyi1C6EH5YdabJvJAHlPQOj9
-piIjskc9wuTtE79VqSVHPBqmlFkyBCi5Ln1urf7c8pEy82Tt60IGkSWTnsUeJd9p
-CUNe/EaNQBO+RgIWlTjlg7gDSkT9mQCg30aY+YffALLLChYyGHr4lAsYHitvV2yH
-FiSlFIMzanZorgKfXpTVi7LNQf8AcpiukvrwwVLybKZRSlSfGq/YFRbLUniVRlLS
-MwYSSeqTKt+UixDwbu27UIMAOTy5xbHmmNtsNBw6PDB9GLZujLJdSEhjPx/4uJhq
-sX0HJDlxAoGBAPeyX8E7qHyBpc8lDma8Rwt5la8HDxwrMj+MHsvcSl/okZus1NJT
-x7U+ilLTkFRAk5BZ3qWcnsF4mUYdWTbU/cZUILQuTCqLPHsV5K4mpF7ObSUGTGel
-EGeDmDRNpfLIvYErGJcXEkoxuk9+iIK78ABERDlqr1DUDGQd+3XVbqR3AoGBANuQ
-sgY63OQJtpLVaQ1Qy05eUkKS6vgRabZrz6h7sLxMIbdFeXIs5rTbS8Z5DFgHa28V
-XZURVTfmWJpWi5eBe5h6gv3mh9J6UBVDxd8QJy6MabqlEzsy2tH9kLNSwZkPLIrr
-ra+MjqOtRyneVKeSQehT+pszzj/1zkasErWL58jTAoGAPJ2UPU+CLeX0U7r3yUBu
-CmrYrJqHohcYFuENcEoakVnyuCwVcNs71ijV5OsNOPEMq5iymci4ORRwPe5UtMxu
-xig0UKO70/V6+YwkCFJAi0rs/tCJxhto5kwX5UTTRZTGe2O2gtMMkMeWlnmaopOn
-aglKwNpQyPD7j0yfCvkOOIUCgYEA0ZaSyW2g87Dt7cX3jLVmDL3uqgwSbZA5p9/M
-DtlbgLLvsEGKR1njNBrtf1yHUvRqMlRjy2sLPNwOEe2xPINmVswDhJhtaJZHIbVb
-Ca4iqMVyG6995xGJXdA9M2A424FnlIiaeCuk8Urz1lyb1IXBkiOv4j0WkWlzaXTS
-Oyh8re8CgYEAiuH43sNrGWgBvlLQBmumulEch/0K78MO98vQbIJPEXeSNOWvAEHV
-GiRncS6AVGil7tn5tQdZu/TdbmoIo7fuqFuaamzEj4FKv1a8a59KUq4KNb+zycUx
-yt4qcbBS51J96sdbpmkNLEUAos0yxSYoBgcvAGJFdJFAIPW/4U0k5/U=
+
 -----END RSA PRIVATE KEY-----
 
 )EOF";
 // Amazon Trust Services(ATS) 엔드포인트 CA 인증서 (서버인증 > "RSA 2048비트 키: Amazon Root CA 1" 다운로드)
 const char ca_str[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
-MIIDQTCCAimgAwIBAgITBmyfz5m/jAo54vB4ikPmljZbyjANBgkqhkiG9w0BAQsF
-ADA5MQswCQYDVQQGEwJVUzEPMA0GA1UEChMGQW1hem9uMRkwFwYDVQQDExBBbWF6
-b24gUm9vdCBDQSAxMB4XDTE1MDUyNjAwMDAwMFoXDTM4MDExNzAwMDAwMFowOTEL
-MAkGA1UEBhMCVVMxDzANBgNVBAoTBkFtYXpvbjEZMBcGA1UEAxMQQW1hem9uIFJv
-b3QgQ0EgMTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALJ4gHHKeNXj
-ca9HgFB0fW7Y14h29Jlo91ghYPl0hAEvrAIthtOgQ3pOsqTQNroBvo3bSMgHFzZM
-9O6II8c+6zf1tRn4SWiw3te5djgdYZ6k/oI2peVKVuRF4fn9tBb6dNqcmzU5L/qw
-IFAGbHrQgLKm+a/sRxmPUDgH3KKHOVj4utWp+UhnMJbulHheb4mjUcAwhmahRWa6
-VOujw5H5SNz/0egwLX0tdHA114gk957EWW67c4cX8jJGKLhD+rcdqsq08p8kDi1L
-93FcXmn/6pUCyziKrlA4b9v7LWIbxcceVOF34GfID5yHI9Y/QCB/IIDEgEw+OyQm
-jgSubJrIqg0CAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMC
-AYYwHQYDVR0OBBYEFIQYzIU07LwMlJQuCFmcx7IQTgoIMA0GCSqGSIb3DQEBCwUA
-A4IBAQCY8jdaQZChGsV2USggNiMOruYou6r4lK5IpDB/G/wkjUu0yKGX9rbxenDI
-U5PMCCjjmCXPI6T53iHTfIUJrU6adTrCC2qJeHZERxhlbI1Bjjt/msv0tadQ1wUs
-N+gDS63pYaACbvXy8MWy7Vu33PqUXHeeE6V/Uq2V8viTO96LXFvKWlJbYK8U90vv
-o/ufQJVtMVT8QtPHRh8jrdkPSHCa2XV4cdFyQzR1bldZwgJcJmApzyMZFo6IQ6XU
-5MsI+yMRQ+hDKXJioaldXgjUkK642M4UwtBV8ob2xJNDd2ZhwLnoQdeXeGADbkpy
-rqXRfboQnoZsG4q5WTP468SQvvG5
+
 -----END CERTIFICATE-----
 )EOF";
 
