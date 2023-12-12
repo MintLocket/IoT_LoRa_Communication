@@ -1,4 +1,7 @@
-bool bytecmp(byte* b1, byte* b2){   //RFID 비교하기 위한 함수 
+// RFID 바교 함수
+// RFID의 UID는 element 10, byte 배열
+// 배열 인덱스 0~9까지 비교하여 하나라도 겹치는게 없다면 0, 모두 겹치면 1 리턴
+bool bytecmp(byte* b1, byte* b2){ 
   for(int i = 0 ; i <10 ; i++){
     if(b1[i] != b2[i])
       return 0;
