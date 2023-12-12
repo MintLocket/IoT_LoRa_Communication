@@ -29,8 +29,8 @@ const char *ssid = "";  // 와이파이 이름
 const char *pass = "";      // 와이파이 비밀번호
 const char *thingId = "";          // 사물 이름 (thing ID) 
 const char *host = ""; // AWS IoT Core 주소
-const char* outTopic = "outTopic"; 
-const char* inTopic = "inTopic"; 
+const char* outTopic = "outTopic"; //mqtt test
+const char* inTopic = "inTopic"; //mqtt test
 
 long lastMsg = 0;
 char msg[50];
@@ -177,7 +177,7 @@ void setup() {
   //client.setServer(host, 8883);
   client.setCallback(callback);
 
-  client.subscribe("$aws/things/ESP8266_D1_R1/shadow/update/delta"); //사물 디바이스 섀도우의 update/delta 구독
+  client.subscribe("$aws/things/[사물 이름]/shadow/update/delta"); //사물 디바이스 섀도우의 update/delta 구독
 }
 
 void loop() {
@@ -198,22 +198,22 @@ void loop() {
   //   Serial.print("Heap: "); Serial.println(ESP.getFreeHeap()); //Low heap can cause problems
   // }
 
-  ver = SNIPE.lora_recv();
-  if (ver == "IN" && ver != "AT_RX_TIMEOUT")
+  ver = SNIPE.lora_recv(); //LoRa 통신으로 전달 받은 값 대입
+  if (ver == "IN" && ver != "AT_RX_TIMEOUT") //승객 승차신호
   {
     Count++;
     Serial.println("사람이 승차 하였습니다.");
     Serial.println((String) "현재 탑승 인원: "+ Count);
     SNIPE.lora_send("Ack");
   }
-  else if (ver == "OUT" && ver != "AT_RX_TIMEOUT")
+  else if (ver == "OUT" && ver != "AT_RX_TIMEOUT") //승객 하차신호
   {
     Count--;
     Serial.println("사람이 하차 하였습니다.");
     Serial.println((String) "현재 탑승 인원: "+ Count);
     SNIPE.lora_send("Ack");     
   }
-  else if(ver != "IN" && ver != "OUT" && ver != "AT_RX_TIMEOUT"){   
+  else if(ver != "IN" && ver != "OUT" && ver != "AT_RX_TIMEOUT"){ //일반적으로 GPS값 위도, 경도 수신  
     Serial.println((String) "현재 좌표: "+ ver +", 현재 탑승 인원 " + Count);
     if(ver!="AT_ERROR"){
       char payload[512];
@@ -260,7 +260,7 @@ void getDeviceStatus(char* payload) {
 }
 
 void sendMessage(char* payload) {
-  char TOPIC_NAME[]= "$aws/things/ESP8266_D1_R1/shadow/update";
+  char TOPIC_NAME[]= "$aws/things/[사물 이름]/shadow/update"; //[사물 이름]에 해당하는 사물 디바이스 섀도우에 값을 전달하기 위해 토픽 설정
   
   Serial.print("Publishing send message:");
   Serial.println(payload);
