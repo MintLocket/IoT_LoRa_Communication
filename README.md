@@ -4,17 +4,36 @@
 
 해당 코드를 사용하기 위해 SNIPE 라이브러리를 등록해야합니다.
 
-SNIPE https://github.com/codezoo-ltd/SNIPE
+SNIPE: https://github.com/codezoo-ltd/SNIPE
 
-## LoRa_Recv
+## arduino-aws
 
-센세 디바이스에서 전송한 데이터를 수신받는 코드입니다.
+센세 디바이스에서 전송한 데이터를 수신받고,
+
+WiFi를 이용해 AWS와 통신, AWS IoT Core에 등록된 사물의 디바이스 섀도우에 데이터를 업데이트 하는 코드입니다.
+
+사용을 위해 pubsubclient 라이브러리가 필요합니다.
+
+pubsubclient: https://github.com/knolleary/pubsubclient
 
 ### 기능
 
 기본적으로 GPS 정보를 수신받습니다.
 
 RFID 디바이스로부터 승/하차 신호를 수신하면 승객의 카운트를 조절합니다.
+
+수신받은 GPS 정보와 승객 수를 다음 형식의 페이로드로 구성하여 AWS로 전송합니다.
+
+{  
+  \"state\":
+  {
+    \"reported\":
+    {
+      \"GPS\":\"%s\",
+      \"Count\":\"%d\"
+    }
+  }
+}
 
 ## LoRa_GPS_Send
 
@@ -24,7 +43,7 @@ SNIPE 라이브러리의 LoRa_GPS_Send 예제를 사용하였습니다.
 
 예제 사용을 위해 TinyGPS 라이브러리를 등록해야합니다.
 
-TinyGPS https://github.com/mikalhart/TinyGPS
+TinyGPS: https://github.com/mikalhart/TinyGPS
 
 ### 기능
 
@@ -51,7 +70,7 @@ RFID 정보는 연결 리스트를 이용하여 등록, 삭제가 이뤄집니�
 
 해당 코드는 MFRC522 라이브러리의 ReadNUID 예제를 활용하였습니다. 따라서 MFRC522 라이브러리를 등록해야합니다.
 
-MFRC522 https://github.com/miguelbalboa/rfid
+MFRC522: https://github.com/miguelbalboa/rfid
 
 ### 기능
 
