@@ -12,7 +12,7 @@ codezoo LoRa Shield - 3
 
 NEO 6M GPS Sensor - 1
 
-
+RC522 RFID Sensor - 1
 
 해당 코드를 사용하기 위해 SNIPE 라이브러리를 등록해야합니다.
 
