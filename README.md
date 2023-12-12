@@ -16,6 +16,10 @@ WiFi를 이용해 AWS와 통신, AWS IoT Core에 등록된 사물의 디바이�
 
 pubsubclient: https://github.com/knolleary/pubsubclient
 
+해당 기능을 수행하는 디바이스 모듈은 LOLIN(WeMos) D1 R1 모듈이며, 다음 URL을 추가 보드 관리자 URL에 등록해야합니다.
+
+https://arduino.esp8266.com/stable/package_esp8266com_index.json
+
 ### 기능
 
 기본적으로 GPS 정보를 수신받습니다.
